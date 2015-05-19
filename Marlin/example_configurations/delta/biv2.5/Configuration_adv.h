@@ -32,8 +32,8 @@
 #endif
 
 #ifdef THERMAL_PROTECTION_BED
-  #define THERMAL_PROTECTION_BED_PERIOD 20    // Seconds
-  #define THERMAL_PROTECTION_BED_HYSTERESIS 2 // Degrees Celsius
+  #define THERMAL_PROTECTION_BED_PERIOD 120   // Seconds
+  #define THERMAL_PROTECTION_BED_HYSTERESIS 4 // Degrees Celsius
 #endif
 
 /**
@@ -123,7 +123,7 @@
 
 // @section homing
 
-//#define ENDSTOPS_ONLY_FOR_HOMING // If defined the endstops will only be used for homing
+#define ENDSTOPS_ONLY_FOR_HOMING // If defined the endstops will only be used for homing
 
 // @section extras
 
@@ -215,8 +215,8 @@
 //homing hits the endstop, then retracts by this distance, before it tries to slowly bump again:
 #define X_HOME_BUMP_MM 5
 #define Y_HOME_BUMP_MM 5
-#define Z_HOME_BUMP_MM 2
-#define HOMING_BUMP_DIVISOR {2, 2, 4}  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
+#define Z_HOME_BUMP_MM 5 // deltas need the same for all three axis
+#define HOMING_BUMP_DIVISOR {10, 10, 20}  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
 //#define QUICK_HOME  //if this is defined, if both x and y are to be homed, a diagonal move will be performed initially.
 
 // When G28 is called, this option will make Y home before X
@@ -235,7 +235,7 @@
 #define INVERT_E_STEP_PIN false
 
 // Default stepper release if idle. Set to 0 to deactivate.
-#define DEFAULT_STEPPER_DEACTIVE_TIME 60
+#define DEFAULT_STEPPER_DEACTIVE_TIME 0
 
 #define DEFAULT_MINIMUMFEEDRATE       0.0     // minimum feedrate
 #define DEFAULT_MINTRAVELFEEDRATE     0.0
@@ -243,7 +243,7 @@
 // @section lcd
 
 #ifdef ULTIPANEL
-  #define MANUAL_FEEDRATE {120*60, 120*60, 18*60, 60}  // Feedrates for manual moves along X, Y, Z, E from panel
+  #define MANUAL_FEEDRATE {50*60, 50*60, 4*60, 60} // Feedrates for manual moves along X, Y, Z, E from panel
   #define ULTIPANEL_FEEDMULTIPLY  // Comment to disable setting feedrate multiplier via encoder
 #endif
 
@@ -253,7 +253,8 @@
 #define DEFAULT_MINSEGMENTTIME        20000
 
 // If defined the movements slow down when the look ahead buffer is only half full
-#define SLOWDOWN
+// (don't use SLOWDOWN with DELTA because DELTA generates hundreds of segments per second)
+//#define SLOWDOWN
 
 // Frequency limit
 // See nophead's blog for more info
@@ -363,8 +364,8 @@
 
 #ifdef ADVANCE
   #define EXTRUDER_ADVANCE_K .0
-  #define D_FILAMENT 1.75
-  #define STEPS_MM_E 100.47095761381482
+  #define D_FILAMENT 2.85
+  #define STEPS_MM_E 836
 #endif
 
 // @section extras
@@ -417,16 +418,16 @@ const unsigned int dropsegments=5; //everything with less than this number of st
 // until then, intended retractions can be detected by moves that only extrude and the direction.
 // the moves are than replaced by the firmware controlled ones.
 
-// #define FWRETRACT  //ONLY PARTIALLY TESTED
+#define FWRETRACT  //ONLY PARTIALLY TESTED
 #ifdef FWRETRACT
   #define MIN_RETRACT 0.1                //minimum extruded mm to accept a automatic gcode retraction attempt
-  #define RETRACT_LENGTH 3               //default retract length (positive mm)
+  #define RETRACT_LENGTH 5               //default retract length (positive mm)
   #define RETRACT_LENGTH_SWAP 13         //default swap retract length (positive mm), for extruder change
-  #define RETRACT_FEEDRATE 80*60         //default feedrate for retracting (mm/s)
+  #define RETRACT_FEEDRATE 100            //default feedrate for retracting (mm/s)
   #define RETRACT_ZLIFT 0                //default retract Z-lift
   #define RETRACT_RECOVER_LENGTH 0       //default additional recover length (mm, added to retract length when recovering)
-  //#define RETRACT_RECOVER_LENGTH_SWAP 0  //default additional swap recover length (mm, added to retract length when recovering from extruder change)
-  #define RETRACT_RECOVER_FEEDRATE 8*60  //default feedrate for recovering from retraction (mm/s)
+  #define RETRACT_RECOVER_LENGTH_SWAP 0  //default additional swap recover length (mm, added to retract length when recovering from extruder change)
+  #define RETRACT_RECOVER_FEEDRATE 100     //default feedrate for recovering from retraction (mm/s)
 #endif
 
 // Add support for experimental filament exchange support M600; requires display
